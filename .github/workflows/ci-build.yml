@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,8 +21,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Run Unit Tests
+      run: mvn -B test
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -DskipTests
+      run: mvn -B package --file pom.xml
       
     - name: Build Docker Image
       run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/customers-api:latest
